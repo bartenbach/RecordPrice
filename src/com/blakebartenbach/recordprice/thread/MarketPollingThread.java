@@ -2,7 +2,7 @@ package com.blakebartenbach.recordprice.thread;
 
 import com.blakebartenbach.recordprice.JsonReader;
 import com.blakebartenbach.recordprice.RecordHolder;
-import com.blakebartenbach.recordprice.gson.MarketStatus;
+import com.blakebartenbach.recordprice.gson.*;
 
 public class MarketPollingThread implements Runnable {
 
@@ -18,10 +18,12 @@ public class MarketPollingThread implements Runnable {
     public void run() {
         while (true) {
             System.out.println("Polling Market:");
-            MarketStatus marketStatus = JsonReader.getMarketStatus("https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,LTC,ETH&tsyms=USD");
-            Double bitcoinCurrentPrice = marketStatus.getBTC().getUSD();
-            Double litecoinCurrentPrice = marketStatus.getLTC().getUSD();
-            Double ethereumCurrentPrice = marketStatus.getETH().getUSD();
+            Cryptocurrency btcMarketStatus = JsonReader.getMarketStatus(" https://api.coinbase.com/v2/prices/BTC-USD/spot", BTC.class);
+            Cryptocurrency ltcMarketStatus = JsonReader.getMarketStatus(" https://api.coinbase.com/v2/prices/LTC-USD/spot", LTC.class);
+            Cryptocurrency ethMarketStatus = JsonReader.getMarketStatus(" https://api.coinbase.com/v2/prices/ETH-USD/spot", ETH.class);
+            Double bitcoinCurrentPrice = Double.parseDouble(btcMarketStatus.getData().getAmount());
+            Double litecoinCurrentPrice = Double.parseDouble(ltcMarketStatus.getData().getAmount());
+            Double ethereumCurrentPrice = Double.parseDouble(ethMarketStatus.getData().getAmount());
 
             System.out.println("Current Bitcoin Price: " + bitcoinCurrentPrice);
             if (bitcoinCurrentPrice > recordHolder.getBitcoinRecordPrice()) {

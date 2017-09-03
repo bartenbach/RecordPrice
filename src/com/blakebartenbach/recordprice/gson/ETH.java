@@ -4,18 +4,19 @@ package com.blakebartenbach.recordprice.gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ETH {
+public class ETH implements Cryptocurrency{
 
-    @SerializedName("USD")
+    @SerializedName("data")
     @Expose
-    private Double uSD;
+    private Data data;
 
-    public Double getUSD() {
-        return uSD;
+    public Data getData() {
+        return data;
     }
 
-    public void setUSD(Double uSD) {
-        this.uSD = uSD;
+    public void setData(Data data) {
+        this.data = data;
     }
+
 
 }
