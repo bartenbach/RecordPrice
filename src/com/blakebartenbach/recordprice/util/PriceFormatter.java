@@ -6,7 +6,7 @@ public class PriceFormatter {
 
 
     public static String formatPrice(double price) {
-        DecimalFormat df = new DecimalFormat("#.##");
+        DecimalFormat df = new DecimalFormat("#.00");
         return df.format(price);
     }
 }

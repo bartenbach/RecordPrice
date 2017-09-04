@@ -7,17 +7,17 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title>Record Prices</title>
     <script src="http://code.jquery.com/jquery-1.10.2.js" type="text/javascript"></script>
     <script src="recordprice-ajax.js" type="text/javascript"></script>
-  </head>
-  <body>
+</head>
+<body>
     <h1>Bitcoin Record Price: $</h1>
     <div id="bitcoinAjaxResponse"></div>
     <h1>Litecoin Record Price: $</h1>
     <div id="litecoinAjaxResponse"></div>
     <h1>Ethereum Record Price: $</h1>
     <div id="ethereumAjaxResponse"></div>
-  </body>
+</body>
 </html>
