@@ -18,6 +18,7 @@ public class RecordPriceServlet extends HttpServlet {
 
     private FileHandler fileHandler;
     private RecordHolder recordHolder;
+    private MarketPollingThread pollingThread;
 
 
     public void init() {
@@ -27,9 +28,10 @@ public class RecordPriceServlet extends HttpServlet {
             System.out.println("FATAL: RecordHolder failed to initialize!");
             System.exit(1);
         }
-        Thread pollingThread = new Thread(new MarketPollingThread(recordHolder));
-        pollingThread.setDaemon(true);
-        pollingThread.start();
+        pollingThread = new MarketPollingThread(recordHolder);
+        Thread marketPollingThread = new Thread(pollingThread);
+        marketPollingThread.setDaemon(true);
+        marketPollingThread.start();
     }
 
     public void destroy() {
@@ -39,11 +41,22 @@ public class RecordPriceServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+       doPost(request,response);
+    }
 
-        out.print("<h1>Bitcoin Record Price: $" + PriceFormatter.formatPrice(recordHolder.getBitcoinRecordPrice()) + "</h1>");
-        out.print("<h1>Litecoin Record Price: $" + PriceFormatter.formatPrice(recordHolder.getLitecoinRecordPrice()) + "</h1>");
-        out.print("<h1>Ethereum Record Price: $" + PriceFormatter.formatPrice(recordHolder.getEthereumRecordPrice()) + "</h1>");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PrintWriter pw = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        pw.println("{ \"records\": {");
+        pw.println("\"btc\": " + String.valueOf(PriceFormatter.formatPrice(recordHolder.getBitcoinRecordPrice()) + ","));
+        pw.println("\"ltc\": " + String.valueOf(PriceFormatter.formatPrice(recordHolder.getLitecoinRecordPrice()) + ","));
+        pw.println("\"eth\": " + String.valueOf(PriceFormatter.formatPrice(recordHolder.getEthereumRecordPrice()) + " },"));
+        pw.println("\"current\":{");
+        pw.println("\"btc\": " + String.valueOf(pollingThread.getBitcoinCurrentPrice()) + ",");
+        pw.println("\"ltc\": " + String.valueOf(PriceFormatter.formatPrice(recordHolder.getLitecoinRecordPrice()) + ","));
+        pw.println("\"eth\": " + String.valueOf(PriceFormatter.formatPrice(recordHolder.getEthereumRecordPrice()) + " }"));
+        pw.println("}");
+        pw.close();
     }
 }

@@ -4,10 +4,13 @@ import com.blakebartenbach.recordprice.JsonReader;
 import com.blakebartenbach.recordprice.RecordHolder;
 import com.blakebartenbach.recordprice.gson.*;
 
-public class MarketPollingThread implements Runnable {
+public class MarketPollingThread extends Thread {
 
 
     private RecordHolder recordHolder;
+    private volatile double bitcoinCurrentPrice;
+    private volatile double litecoinCurrentPrice;
+    private volatile double ethereumCurrentPrice;
 
 
     public MarketPollingThread(RecordHolder recordHolder) {
@@ -21,9 +24,9 @@ public class MarketPollingThread implements Runnable {
             Cryptocurrency btcMarketStatus = JsonReader.getMarketStatus(" https://api.coinbase.com/v2/prices/BTC-USD/spot", BTC.class);
             Cryptocurrency ltcMarketStatus = JsonReader.getMarketStatus(" https://api.coinbase.com/v2/prices/LTC-USD/spot", LTC.class);
             Cryptocurrency ethMarketStatus = JsonReader.getMarketStatus(" https://api.coinbase.com/v2/prices/ETH-USD/spot", ETH.class);
-            Double bitcoinCurrentPrice = Double.parseDouble(btcMarketStatus.getData().getAmount());
-            Double litecoinCurrentPrice = Double.parseDouble(ltcMarketStatus.getData().getAmount());
-            Double ethereumCurrentPrice = Double.parseDouble(ethMarketStatus.getData().getAmount());
+            this.bitcoinCurrentPrice = Double.parseDouble(btcMarketStatus.getData().getAmount());
+            this.litecoinCurrentPrice = Double.parseDouble(ltcMarketStatus.getData().getAmount());
+            this.ethereumCurrentPrice = Double.parseDouble(ethMarketStatus.getData().getAmount());
 
             System.out.println("Current Bitcoin Price: " + bitcoinCurrentPrice);
             if (bitcoinCurrentPrice > recordHolder.getBitcoinRecordPrice()) {
@@ -47,6 +50,18 @@ public class MarketPollingThread implements Runnable {
                 System.out.println("Thread interrupted - we don't care.");
             }
         }
+    }
+
+    public synchronized double getBitcoinCurrentPrice() {
+        return this.bitcoinCurrentPrice;
+    }
+
+    public synchronized double getLitecoinCurrentPrice() {
+        return this.litecoinCurrentPrice;
+    }
+
+    public synchronized double getEthereumCurrentPrice() {
+        return this.ethereumCurrentPrice;
     }
 
 }
