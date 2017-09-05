@@ -1,14 +1,23 @@
     $.ajax({
             type: "POST",
-            url: '/price',
+            // development url
+            //url: '/price',
+            // deployment url
+            url: '/record/price',
             dataType: 'json',
             success: function (data) {
-                $('#bitcoinRecord').html(data.records.btc);
-                $('#litecoinRecord').html(data.records.ltc);
-                $('#ethereumRecord').html(data.records.eth);
-                $('#bitcoinCurrent').html(data.current.btc);
-                $('#litecoinCurrent').html(data.current.ltc);
-                $('#ethereumCurrent').html(data.current.eth);
+                // records
+                $('#bitcoinRecord').html(parseFloat(data.records.btc).toFixed(2));
+                $('#litecoinRecord').html(parseFloat(data.records.ltc).toFixed(2));
+                $('#ethereumRecord').html(parseFloat(data.records.eth).toFixed(2));
+                // current prices
+                $('#bitcoinCurrent').html(parseFloat(data.current.btc)).toFixed(2);
+                $('#litecoinCurrent').html(parseFloat(data.current.ltc).toFixed(2));
+                $('#ethereumCurrent').html(parseFloat(data.current.eth).toFixed(2));
+                // differences
+                $('#bitcoinDifference').html(parseFloat(data.records.btc - data.current.btc).toFixed(2));
+                $('#litecoinDifference').html(parseFloat(data.records.ltc - data.current.ltc).toFixed(2));
+                $('#ethereumDifference').html(parseFloat(data.records.eth - data.current.eth).toFixed(2));
             },
             error: function (jqXHR, exception) {
                 var msg = '';
@@ -38,9 +47,18 @@
             url: '/price',
             dataType: 'json',
             success: function (data) {
-                $('#bitcoinAjaxResponse').html(data.btc);
-                $('#litecoinAjaxResponse').html(data.ltc);
-                $('#ethereumAjaxResponse').html(data.eth);
+                // records
+                $('#bitcoinRecord').html(parseFloat(data.records.btc).toFixed(2));
+                $('#litecoinRecord').html(parseFloat(data.records.ltc).toFixed(2));
+                $('#ethereumRecord').html(parseFloat(data.records.eth).toFixed(2));
+                // current prices
+                $('#bitcoinCurrent').html(parseFloat(data.current.btc)).toFixed(2);
+                $('#litecoinCurrent').html(parseFloat(data.current.ltc).toFixed(2));
+                $('#ethereumCurrent').html(parseFloat(data.current.eth).toFixed(2));
+                // differences
+                $('#bitcoinDifference').html(parseFloat(data.records.btc - data.current.btc).toFixed(2));
+                $('#litecoinDifference').html(parseFloat(data.records.ltc - data.current.ltc).toFixed(2));
+                $('#ethereumDifference').html(parseFloat(data.records.eth - data.current.eth).toFixed(2));
             },
             error: function (jqXHR, exception) {
                 var msg = '';

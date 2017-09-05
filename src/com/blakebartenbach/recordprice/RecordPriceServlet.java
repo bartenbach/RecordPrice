@@ -53,9 +53,9 @@ public class RecordPriceServlet extends HttpServlet {
         pw.println("\"ltc\": " + String.valueOf(PriceFormatter.formatPrice(recordHolder.getLitecoinRecordPrice()) + ","));
         pw.println("\"eth\": " + String.valueOf(PriceFormatter.formatPrice(recordHolder.getEthereumRecordPrice()) + " },"));
         pw.println("\"current\":{");
-        pw.println("\"btc\": " + String.valueOf(pollingThread.getBitcoinCurrentPrice()) + ",");
-        pw.println("\"ltc\": " + String.valueOf(PriceFormatter.formatPrice(recordHolder.getLitecoinRecordPrice()) + ","));
-        pw.println("\"eth\": " + String.valueOf(PriceFormatter.formatPrice(recordHolder.getEthereumRecordPrice()) + " }"));
+        pw.println("\"btc\": " + String.valueOf(PriceFormatter.formatPrice(pollingThread.getBitcoinCurrentPrice())) + ",");
+        pw.println("\"ltc\": " + String.valueOf(PriceFormatter.formatPrice(pollingThread.getLitecoinCurrentPrice()) + ","));
+        pw.println("\"eth\": " + String.valueOf(PriceFormatter.formatPrice(pollingThread.getEthereumCurrentPrice()) + " }"));
         pw.println("}");
         pw.close();
     }
